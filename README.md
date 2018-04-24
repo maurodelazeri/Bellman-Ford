@@ -20,6 +20,10 @@ must range from 1 to _n_, the total number of verticies.
 
 ## Usage
 
-```
 go run main.go -i paths.txt
+
+```
+2018/04/24 14:48:12 The min path was of cost -4
+2018/04/24 14:48:12 There was a negative cost cycle detected.
+
 ```
