@@ -1,0 +1,6 @@
+on-2 ok=True tx=9600 complete=9600 unsettled=0 dups=7336 inconsistent=0
+on-3 ok=True tx=9600 complete=9600 unsettled=0 dups=7264 inconsistent=0
+off-1 ok=True tx=9600 complete=9600 unsettled=0 dups=7342 inconsistent=0
+off-2 ok=True tx=9600 complete=9600 unsettled=0 dups=7036 inconsistent=0
+off-3 ok=True tx=9600 complete=9600 unsettled=0 dups=7352 inconsistent=0
+DONE

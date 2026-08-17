@@ -1,0 +1,35 @@
+{
+  "complete": 7999,
+  "conflicting_terminal": {
+    "count": 0,
+    "sample": []
+  },
+  "duplicate_events": 2378,
+  "files": 2,
+  "inconsistent_duplicates": 0,
+  "lines": 42376,
+  "missing_prefix": {
+    "count": 0,
+    "sample": []
+  },
+  "missing_terminal": {
+    "count": 1,
+    "sample": [
+      "crash-r400-k1-d5-000003846"
+    ]
+  },
+  "ok": false,
+  "outcomes": {
+    "confirmed": 7248,
+    "expired": 496,
+    "failed_on_chain": 255
+  },
+  "parse_errors": 0,
+  "transactions": 8000,
+  "unsettled": {
+    "count": 1,
+    "sample": [
+      "crash-r400-k1-d5-000003846"
+    ]
+  }
+}

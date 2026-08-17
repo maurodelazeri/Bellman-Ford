@@ -1,0 +1,1678 @@
+{
+  "drain": {
+    "completed": 80000,
+    "drain_s": 58.333770387,
+    "drained": true,
+    "expected": 80000,
+    "peak_settle_rate": 1316.6866977117961
+  },
+  "final_service_stats": {
+    "bundles_completed": 0,
+    "cluster": {
+      "feed_pending": 0,
+      "landings": 75101,
+      "slot": 300000246,
+      "tpu_bytes": 6448398336,
+      "tpu_sends": 12594528
+    },
+    "completed": 80000,
+    "config": "region=us journal_mode=lean sink=Null slot_ms=400 fast_path=true emit_all_stages=true durable_commitment_wait=false journal_retention=300s workers=4",
+    "durable_steps_executed": 160000,
+    "durable_steps_journaled": 160000,
+    "handler_entries": 80000,
+    "in_flight": 0,
+    "journal_mode": "lean",
+    "journal_steps_per_tx": 2.0,
+    "latency": {
+      "durable_step": {
+        "count": 80000,
+        "max_us": 917831,
+        "mean_us": 36938.0,
+        "p50_us": 32768,
+        "p90_us": 131072,
+        "p999_us": 1048576,
+        "p99_us": 524288
+      },
+      "time_to_first_send": {
+        "count": 80000,
+        "max_us": 791757,
+        "mean_us": 28859.0,
+        "p50_us": 32768,
+        "p90_us": 65536,
+        "p999_us": 1048576,
+        "p99_us": 262144
+      },
+      "time_to_handler": {
+        "count": 80000,
+        "max_us": 791757,
+        "mean_us": 28858.0,
+        "p50_us": 32768,
+        "p90_us": 65536,
+        "p999_us": 1048576,
+        "p99_us": 262144
+      }
+    },
+    "mean_e2e_ms": 5504.8036946875,
+    "outcomes": {
+      "dropped": 0,
+      "expired": 4899,
+      "failed_on_chain": 2419,
+      "landed": 72682
+    },
+    "sink": {
+      "batches": 143262,
+      "dropped": 0,
+      "emitted": 400000,
+      "write_micros": 0,
+      "written": 400000
+    },
+    "webhooks": {
+      "failed": 0,
+      "ok": 0
+    }
+  },
+  "load": {
+    "achieved_rate": 1996.825914566461,
+    "ack_latency_us": {
+      "max": 503039,
+      "p50": 16607,
+      "p90": 41567,
+      "p99": 132351,
+      "p999": 319743
+    },
+    "acked": 80000,
+    "backpressured": 0,
+    "connections": 8,
+    "duration_s": 40,
+    "errors": 0,
+    "payload_bytes": 512,
+    "rate": 2000,
+    "rejected": 0,
+    "scheduled": 80000,
+    "spike_rate": 0,
+    "status_codes": [
+      [
+        202,
+        80000
+      ]
+    ],
+    "validity_slots": 150,
+    "wall_s": 40.063582617,
+    "webhook_pct": 0
+  },
+  "samples": [
+    {
+      "completed": 0,
+      "durable_steps_executed": 0,
+      "handler_entries": 0,
+      "in_flight": 0,
+      "sink_dropped": 0,
+      "sink_emitted": 0,
+      "t_s": 0.001544749,
+      "tpu_sends": 0
+    },
+    {
+      "completed": 345,
+      "durable_steps_executed": 3916,
+      "handler_entries": 1969,
+      "in_flight": 1602,
+      "sink_dropped": 0,
+      "sink_emitted": 6553,
+      "t_s": 1.001186122,
+      "tpu_sends": 31791
+    },
+    {
+      "completed": 2037,
+      "durable_steps_executed": 7841,
+      "handler_entries": 3952,
+      "in_flight": 1852,
+      "sink_dropped": 0,
+      "sink_emitted": 15804,
+      "t_s": 2.002175669,
+      "tpu_sends": 80376
+    },
+    {
+      "completed": 3503,
+      "durable_steps_executed": 11858,
+      "handler_entries": 5952,
+      "in_flight": 2403,
+      "sink_dropped": 0,
+      "sink_emitted": 24770,
+      "t_s": 3.001602461,
+      "tpu_sends": 139278
+    },
+    {
+      "completed": 5320,
+      "durable_steps_executed": 15797,
+      "handler_entries": 7947,
+      "in_flight": 2530,
+      "sink_dropped": 0,
+      "sink_emitted": 34287,
+      "t_s": 4.00080642,
+      "tpu_sends": 204480
+    },
+    {
+      "completed": 6860,
+      "durable_steps_executed": 19911,
+      "handler_entries": 9976,
+      "in_flight": 3075,
+      "sink_dropped": 0,
+      "sink_emitted": 43566,
+      "t_s": 5.000594439,
+      "tpu_sends": 282342
+    },
+    {
+      "completed": 8798,
+      "durable_steps_executed": 23790,
+      "handler_entries": 11926,
+      "in_flight": 3066,
+      "sink_dropped": 0,
+      "sink_emitted": 53250,
+      "t_s": 6.001827329,
+      "tpu_sends": 367662
+    },
+    {
+      "completed": 10344,
+      "durable_steps_executed": 27927,
+      "handler_entries": 13980,
+      "in_flight": 3603,
+      "sink_dropped": 0,
+      "sink_emitted": 62562,
+      "t_s": 7.001784044,
+      "tpu_sends": 460908
+    },
+    {
+      "completed": 12337,
+      "durable_steps_executed": 31829,
+      "handler_entries": 15945,
+      "in_flight": 3547,
+      "sink_dropped": 0,
+      "sink_emitted": 72387,
+      "t_s": 8.001263588,
+      "tpu_sends": 560124
+    },
+    {
+      "completed": 13865,
+      "durable_steps_executed": 35870,
+      "handler_entries": 17953,
+      "in_flight": 4052,
+      "sink_dropped": 0,
+      "sink_emitted": 81517,
+      "t_s": 9.000727647,
+      "tpu_sends": 666804
+    },
+    {
+      "completed": 15849,
+      "durable_steps_executed": 39802,
+      "handler_entries": 19941,
+      "in_flight": 4012,
+      "sink_dropped": 0,
+      "sink_emitted": 91361,
+      "t_s": 10.000834171,
+      "tpu_sends": 780069
+    },
+    {
+      "completed": 17393,
+      "durable_steps_executed": 43901,
+      "handler_entries": 21969,
+      "in_flight": 4539,
+      "sink_dropped": 0,
+      "sink_emitted": 100619,
+      "t_s": 11.00095715,
+      "tpu_sends": 901527
+    },
+    {
+      "completed": 19372,
+      "durable_steps_executed": 47770,
+      "handler_entries": 23932,
+      "in_flight": 4466,
+      "sink_dropped": 0,
+      "sink_emitted": 110352,
+      "t_s": 12.00167536,
+      "tpu_sends": 1029570
+    },
+    {
+      "completed": 20928,
+      "durable_steps_executed": 51883,
+      "handler_entries": 25968,
+      "in_flight": 4987,
+      "sink_dropped": 0,
+      "sink_emitted": 119654,
+      "t_s": 13.001075194,
+      "tpu_sends": 1165365
+    },
+    {
+      "completed": 22895,
+      "durable_steps_executed": 55744,
+      "handler_entries": 27914,
+      "in_flight": 4935,
+      "sink_dropped": 0,
+      "sink_emitted": 129364,
+      "t_s": 14.001184635,
+      "tpu_sends": 1306047
+    },
+    {
+      "completed": 24524,
+      "durable_steps_executed": 59893,
+      "handler_entries": 29970,
+      "in_flight": 5399,
+      "sink_dropped": 0,
+      "sink_emitted": 138864,
+      "t_s": 15.001393273,
+      "tpu_sends": 1452696
+    },
+    {
+      "completed": 26588,
+      "durable_steps_executed": 63755,
+      "handler_entries": 31925,
+      "in_flight": 5242,
+      "sink_dropped": 0,
+      "sink_emitted": 148761,
+      "t_s": 16.001120164,
+      "tpu_sends": 1603407
+    },
+    {
+      "completed": 28269,
+      "durable_steps_executed": 67914,
+      "handler_entries": 33976,
+      "in_flight": 5669,
+      "sink_dropped": 0,
+      "sink_emitted": 158390,
+      "t_s": 17.002517845,
+      "tpu_sends": 1759602
+    },
+    {
+      "completed": 30301,
+      "durable_steps_executed": 71796,
+      "handler_entries": 35948,
+      "in_flight": 5547,
+      "sink_dropped": 0,
+      "sink_emitted": 168246,
+      "t_s": 18.001133925,
+      "tpu_sends": 1920354
+    },
+    {
+      "completed": 31889,
+      "durable_steps_executed": 75909,
+      "handler_entries": 37972,
+      "in_flight": 6048,
+      "sink_dropped": 0,
+      "sink_emitted": 177624,
+      "t_s": 19.001167589,
+      "tpu_sends": 2086638
+    },
+    {
+      "completed": 33922,
+      "durable_steps_executed": 79706,
+      "handler_entries": 39921,
+      "in_flight": 5863,
+      "sink_dropped": 0,
+      "sink_emitted": 187335,
+      "t_s": 20.0062582,
+      "tpu_sends": 2256246
+    },
+    {
+      "completed": 35593,
+      "durable_steps_executed": 83917,
+      "handler_entries": 41970,
+      "in_flight": 6355,
+      "sink_dropped": 0,
+      "sink_emitted": 197050,
+      "t_s": 21.001640851,
+      "tpu_sends": 2428116
+    },
+    {
+      "completed": 37526,
+      "durable_steps_executed": 87680,
+      "handler_entries": 43895,
+      "in_flight": 6259,
+      "sink_dropped": 0,
+      "sink_emitted": 206517,
+      "t_s": 22.001711256,
+      "tpu_sends": 2606682
+    },
+    {
+      "completed": 39302,
+      "durable_steps_executed": 91818,
+      "handler_entries": 45942,
+      "in_flight": 6574,
+      "sink_dropped": 0,
+      "sink_emitted": 216298,
+      "t_s": 23.000982677,
+      "tpu_sends": 2789019
+    },
+    {
+      "completed": 41484,
+      "durable_steps_executed": 95802,
+      "handler_entries": 47944,
+      "in_flight": 6373,
+      "sink_dropped": 0,
+      "sink_emitted": 226629,
+      "t_s": 24.00322705,
+      "tpu_sends": 2975793
+    },
+    {
+      "completed": 43065,
+      "durable_steps_executed": 99888,
+      "handler_entries": 49972,
+      "in_flight": 6851,
+      "sink_dropped": 0,
+      "sink_emitted": 235934,
+      "t_s": 25.000736614,
+      "tpu_sends": 3166836
+    },
+    {
+      "completed": 45171,
+      "durable_steps_executed": 103808,
+      "handler_entries": 51942,
+      "in_flight": 6695,
+      "sink_dropped": 0,
+      "sink_emitted": 246016,
+      "t_s": 26.001620638,
+      "tpu_sends": 3361839
+    },
+    {
+      "completed": 46849,
+      "durable_steps_executed": 107870,
+      "handler_entries": 53963,
+      "in_flight": 7058,
+      "sink_dropped": 0,
+      "sink_emitted": 255475,
+      "t_s": 27.002023646,
+      "tpu_sends": 3560295
+    },
+    {
+      "completed": 48993,
+      "durable_steps_executed": 111799,
+      "handler_entries": 55932,
+      "in_flight": 6874,
+      "sink_dropped": 0,
+      "sink_emitted": 265652,
+      "t_s": 28.001664279,
+      "tpu_sends": 3761133
+    },
+    {
+      "completed": 50448,
+      "durable_steps_executed": 115550,
+      "handler_entries": 57869,
+      "in_flight": 7233,
+      "sink_dropped": 0,
+      "sink_emitted": 274127,
+      "t_s": 29.001636759,
+      "tpu_sends": 3962100
+    },
+    {
+      "completed": 52607,
+      "durable_steps_executed": 119672,
+      "handler_entries": 59925,
+      "in_flight": 7140,
+      "sink_dropped": 0,
+      "sink_emitted": 284633,
+      "t_s": 30.000829662,
+      "tpu_sends": 4168986
+    },
+    {
+      "completed": 54278,
+      "durable_steps_executed": 123916,
+      "handler_entries": 61973,
+      "in_flight": 7665,
+      "sink_dropped": 0,
+      "sink_emitted": 294415,
+      "t_s": 31.00181999,
+      "tpu_sends": 4383669
+    },
+    {
+      "completed": 56395,
+      "durable_steps_executed": 127779,
+      "handler_entries": 63930,
+      "in_flight": 7454,
+      "sink_dropped": 0,
+      "sink_emitted": 304418,
+      "t_s": 32.001713613,
+      "tpu_sends": 4600143
+    },
+    {
+      "completed": 58077,
+      "durable_steps_executed": 131845,
+      "handler_entries": 65955,
+      "in_flight": 7813,
+      "sink_dropped": 0,
+      "sink_emitted": 313889,
+      "t_s": 33.001032292,
+      "tpu_sends": 4819947
+    },
+    {
+      "completed": 60172,
+      "durable_steps_executed": 135768,
+      "handler_entries": 67929,
+      "in_flight": 7667,
+      "sink_dropped": 0,
+      "sink_emitted": 323951,
+      "t_s": 34.001181241,
+      "tpu_sends": 5042769
+    },
+    {
+      "completed": 61838,
+      "durable_steps_executed": 139877,
+      "handler_entries": 69964,
+      "in_flight": 8075,
+      "sink_dropped": 0,
+      "sink_emitted": 333466,
+      "t_s": 35.001019289,
+      "tpu_sends": 5270541
+    },
+    {
+      "completed": 63926,
+      "durable_steps_executed": 143749,
+      "handler_entries": 71922,
+      "in_flight": 7901,
+      "sink_dropped": 0,
+      "sink_emitted": 343428,
+      "t_s": 36.001525171,
+      "tpu_sends": 5501274
+    },
+    {
+      "completed": 65574,
+      "durable_steps_executed": 147891,
+      "handler_entries": 73966,
+      "in_flight": 8351,
+      "sink_dropped": 0,
+      "sink_emitted": 352964,
+      "t_s": 37.001413205,
+      "tpu_sends": 5735460
+    },
+    {
+      "completed": 67115,
+      "durable_steps_executed": 150839,
+      "handler_entries": 75633,
+      "in_flight": 8091,
+      "sink_dropped": 0,
+      "sink_emitted": 360275,
+      "t_s": 38.001708025,
+      "tpu_sends": 5965920
+    },
+    {
+      "completed": 69186,
+      "durable_steps_executed": 155643,
+      "handler_entries": 77917,
+      "in_flight": 8540,
+      "sink_dropped": 0,
+      "sink_emitted": 371741,
+      "t_s": 39.000978419,
+      "tpu_sends": 6206244
+    },
+    {
+      "completed": 71225,
+      "durable_steps_executed": 159663,
+      "handler_entries": 79908,
+      "in_flight": 8530,
+      "sink_dropped": 0,
+      "sink_emitted": 381868,
+      "t_s": 40.001611006,
+      "tpu_sends": 6447333
+    },
+    {
+      "completed": 72727,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 7273,
+      "sink_dropped": 0,
+      "sink_emitted": 385454,
+      "t_s": 41.002943097,
+      "tpu_sends": 6668775
+    },
+    {
+      "completed": 72727,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 7273,
+      "sink_dropped": 0,
+      "sink_emitted": 385454,
+      "t_s": 1.010112437,
+      "tpu_sends": 6684111
+    },
+    {
+      "completed": 73226,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6774,
+      "sink_dropped": 0,
+      "sink_emitted": 386452,
+      "t_s": 42.001973034,
+      "tpu_sends": 6872601
+    },
+    {
+      "completed": 73226,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6774,
+      "sink_dropped": 0,
+      "sink_emitted": 386452,
+      "t_s": 2.016152712,
+      "tpu_sends": 6889305
+    },
+    {
+      "completed": 73359,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6641,
+      "sink_dropped": 0,
+      "sink_emitted": 386718,
+      "t_s": 43.002736108,
+      "tpu_sends": 7072587
+    },
+    {
+      "completed": 73359,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6641,
+      "sink_dropped": 0,
+      "sink_emitted": 386718,
+      "t_s": 3.021629457,
+      "tpu_sends": 7088793
+    },
+    {
+      "completed": 73568,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6432,
+      "sink_dropped": 0,
+      "sink_emitted": 387136,
+      "t_s": 44.001953101,
+      "tpu_sends": 7265973
+    },
+    {
+      "completed": 73568,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6432,
+      "sink_dropped": 0,
+      "sink_emitted": 387136,
+      "t_s": 4.029863294,
+      "tpu_sends": 7284060
+    },
+    {
+      "completed": 73698,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6302,
+      "sink_dropped": 0,
+      "sink_emitted": 387396,
+      "t_s": 45.002732699,
+      "tpu_sends": 7455900
+    },
+    {
+      "completed": 73698,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6302,
+      "sink_dropped": 0,
+      "sink_emitted": 387396,
+      "t_s": 5.035285534,
+      "tpu_sends": 7473516
+    },
+    {
+      "completed": 73869,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6131,
+      "sink_dropped": 0,
+      "sink_emitted": 387738,
+      "t_s": 46.002058276,
+      "tpu_sends": 7640073
+    },
+    {
+      "completed": 73869,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6131,
+      "sink_dropped": 0,
+      "sink_emitted": 387738,
+      "t_s": 6.040784442,
+      "tpu_sends": 7660332
+    },
+    {
+      "completed": 73995,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6005,
+      "sink_dropped": 0,
+      "sink_emitted": 387990,
+      "t_s": 47.001896552,
+      "tpu_sends": 7820784
+    },
+    {
+      "completed": 73995,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 6005,
+      "sink_dropped": 0,
+      "sink_emitted": 387990,
+      "t_s": 7.046176123,
+      "tpu_sends": 7842237
+    },
+    {
+      "completed": 74134,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5866,
+      "sink_dropped": 0,
+      "sink_emitted": 388268,
+      "t_s": 48.002252206,
+      "tpu_sends": 7997649
+    },
+    {
+      "completed": 74134,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5866,
+      "sink_dropped": 0,
+      "sink_emitted": 388268,
+      "t_s": 8.050148527,
+      "tpu_sends": 8019363
+    },
+    {
+      "completed": 74235,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5765,
+      "sink_dropped": 0,
+      "sink_emitted": 388470,
+      "t_s": 49.002016761,
+      "tpu_sends": 8170677
+    },
+    {
+      "completed": 74236,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5764,
+      "sink_dropped": 0,
+      "sink_emitted": 388472,
+      "t_s": 9.0556352,
+      "tpu_sends": 8192505
+    },
+    {
+      "completed": 74352,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5648,
+      "sink_dropped": 0,
+      "sink_emitted": 388704,
+      "t_s": 50.002358164,
+      "tpu_sends": 8340840
+    },
+    {
+      "completed": 74352,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5648,
+      "sink_dropped": 0,
+      "sink_emitted": 388704,
+      "t_s": 10.061532615,
+      "tpu_sends": 8362122
+    },
+    {
+      "completed": 74435,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5565,
+      "sink_dropped": 0,
+      "sink_emitted": 388870,
+      "t_s": 51.002517269,
+      "tpu_sends": 8507850
+    },
+    {
+      "completed": 74482,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5518,
+      "sink_dropped": 0,
+      "sink_emitted": 388964,
+      "t_s": 11.067421619,
+      "tpu_sends": 8529636
+    },
+    {
+      "completed": 74559,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5441,
+      "sink_dropped": 0,
+      "sink_emitted": 389118,
+      "t_s": 52.001738509,
+      "tpu_sends": 8671428
+    },
+    {
+      "completed": 74559,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5441,
+      "sink_dropped": 0,
+      "sink_emitted": 389118,
+      "t_s": 12.071937674,
+      "tpu_sends": 8693289
+    },
+    {
+      "completed": 74638,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5362,
+      "sink_dropped": 0,
+      "sink_emitted": 389276,
+      "t_s": 53.002412844,
+      "tpu_sends": 8832708
+    },
+    {
+      "completed": 74676,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5324,
+      "sink_dropped": 0,
+      "sink_emitted": 389352,
+      "t_s": 13.076719149,
+      "tpu_sends": 8853960
+    },
+    {
+      "completed": 74733,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5267,
+      "sink_dropped": 0,
+      "sink_emitted": 389466,
+      "t_s": 54.003176239,
+      "tpu_sends": 8991222
+    },
+    {
+      "completed": 74733,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5267,
+      "sink_dropped": 0,
+      "sink_emitted": 389466,
+      "t_s": 14.080449559,
+      "tpu_sends": 9013140
+    },
+    {
+      "completed": 74784,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5216,
+      "sink_dropped": 0,
+      "sink_emitted": 389568,
+      "t_s": 55.0021637,
+      "tpu_sends": 9147681
+    },
+    {
+      "completed": 74811,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5189,
+      "sink_dropped": 0,
+      "sink_emitted": 389622,
+      "t_s": 15.084514387,
+      "tpu_sends": 9170649
+    },
+    {
+      "completed": 74867,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5133,
+      "sink_dropped": 0,
+      "sink_emitted": 389734,
+      "t_s": 56.001515677,
+      "tpu_sends": 9301503
+    },
+    {
+      "completed": 74867,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5133,
+      "sink_dropped": 0,
+      "sink_emitted": 389734,
+      "t_s": 16.089639236,
+      "tpu_sends": 9325926
+    },
+    {
+      "completed": 74913,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5087,
+      "sink_dropped": 0,
+      "sink_emitted": 389826,
+      "t_s": 57.002628353,
+      "tpu_sends": 9454734
+    },
+    {
+      "completed": 74935,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5065,
+      "sink_dropped": 0,
+      "sink_emitted": 389870,
+      "t_s": 17.095465479,
+      "tpu_sends": 9479253
+    },
+    {
+      "completed": 74976,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5024,
+      "sink_dropped": 0,
+      "sink_emitted": 389952,
+      "t_s": 58.002057193,
+      "tpu_sends": 9605484
+    },
+    {
+      "completed": 74976,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 5024,
+      "sink_dropped": 0,
+      "sink_emitted": 389952,
+      "t_s": 18.100586456,
+      "tpu_sends": 9630108
+    },
+    {
+      "completed": 75092,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4908,
+      "sink_dropped": 0,
+      "sink_emitted": 390184,
+      "t_s": 59.002244022,
+      "tpu_sends": 9754389
+    },
+    {
+      "completed": 75144,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4856,
+      "sink_dropped": 0,
+      "sink_emitted": 390288,
+      "t_s": 19.106701717,
+      "tpu_sends": 9778023
+    },
+    {
+      "completed": 75285,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4715,
+      "sink_dropped": 0,
+      "sink_emitted": 390570,
+      "t_s": 60.002307172,
+      "tpu_sends": 9897666
+    },
+    {
+      "completed": 75294,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4706,
+      "sink_dropped": 0,
+      "sink_emitted": 390588,
+      "t_s": 20.111202521,
+      "tpu_sends": 9920967
+    },
+    {
+      "completed": 75440,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4560,
+      "sink_dropped": 0,
+      "sink_emitted": 390880,
+      "t_s": 61.002722892,
+      "tpu_sends": 10035687
+    },
+    {
+      "completed": 75469,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4531,
+      "sink_dropped": 0,
+      "sink_emitted": 390938,
+      "t_s": 21.115718893,
+      "tpu_sends": 10060698
+    },
+    {
+      "completed": 75584,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4416,
+      "sink_dropped": 0,
+      "sink_emitted": 391168,
+      "t_s": 62.002253166,
+      "tpu_sends": 10170252
+    },
+    {
+      "completed": 75587,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4413,
+      "sink_dropped": 0,
+      "sink_emitted": 391174,
+      "t_s": 22.119763083,
+      "tpu_sends": 10194660
+    },
+    {
+      "completed": 75694,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4306,
+      "sink_dropped": 0,
+      "sink_emitted": 391388,
+      "t_s": 63.002718051,
+      "tpu_sends": 10300956
+    },
+    {
+      "completed": 75734,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4266,
+      "sink_dropped": 0,
+      "sink_emitted": 391468,
+      "t_s": 23.124792532,
+      "tpu_sends": 10324992
+    },
+    {
+      "completed": 75822,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4178,
+      "sink_dropped": 0,
+      "sink_emitted": 391644,
+      "t_s": 64.001643872,
+      "tpu_sends": 10427838
+    },
+    {
+      "completed": 75831,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4169,
+      "sink_dropped": 0,
+      "sink_emitted": 391662,
+      "t_s": 24.13032322,
+      "tpu_sends": 10451982
+    },
+    {
+      "completed": 75936,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4064,
+      "sink_dropped": 0,
+      "sink_emitted": 391872,
+      "t_s": 65.001868406,
+      "tpu_sends": 10551339
+    },
+    {
+      "completed": 75977,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 4023,
+      "sink_dropped": 0,
+      "sink_emitted": 391954,
+      "t_s": 25.135523999,
+      "tpu_sends": 10575579
+    },
+    {
+      "completed": 76059,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3941,
+      "sink_dropped": 0,
+      "sink_emitted": 392118,
+      "t_s": 66.004691106,
+      "tpu_sends": 10671216
+    },
+    {
+      "completed": 76069,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3931,
+      "sink_dropped": 0,
+      "sink_emitted": 392138,
+      "t_s": 26.14277336,
+      "tpu_sends": 10694802
+    },
+    {
+      "completed": 76183,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3817,
+      "sink_dropped": 0,
+      "sink_emitted": 392366,
+      "t_s": 67.002518062,
+      "tpu_sends": 10786734
+    },
+    {
+      "completed": 76234,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3766,
+      "sink_dropped": 0,
+      "sink_emitted": 392468,
+      "t_s": 27.148311059,
+      "tpu_sends": 10810272
+    },
+    {
+      "completed": 76312,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3688,
+      "sink_dropped": 0,
+      "sink_emitted": 392624,
+      "t_s": 68.002625953,
+      "tpu_sends": 10898139
+    },
+    {
+      "completed": 76326,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3674,
+      "sink_dropped": 0,
+      "sink_emitted": 392652,
+      "t_s": 28.154382173,
+      "tpu_sends": 10925037
+    },
+    {
+      "completed": 76420,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3580,
+      "sink_dropped": 0,
+      "sink_emitted": 392840,
+      "t_s": 69.002131379,
+      "tpu_sends": 11008056
+    },
+    {
+      "completed": 76468,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3532,
+      "sink_dropped": 0,
+      "sink_emitted": 392936,
+      "t_s": 29.162164227,
+      "tpu_sends": 11033790
+    },
+    {
+      "completed": 76556,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3444,
+      "sink_dropped": 0,
+      "sink_emitted": 393112,
+      "t_s": 70.003335354,
+      "tpu_sends": 11113176
+    },
+    {
+      "completed": 76567,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3433,
+      "sink_dropped": 0,
+      "sink_emitted": 393134,
+      "t_s": 30.166936507,
+      "tpu_sends": 11138520
+    },
+    {
+      "completed": 76658,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3342,
+      "sink_dropped": 0,
+      "sink_emitted": 393316,
+      "t_s": 71.002208437,
+      "tpu_sends": 11212725
+    },
+    {
+      "completed": 76711,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3289,
+      "sink_dropped": 0,
+      "sink_emitted": 393422,
+      "t_s": 31.170900411,
+      "tpu_sends": 11239179
+    },
+    {
+      "completed": 76798,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3202,
+      "sink_dropped": 0,
+      "sink_emitted": 393596,
+      "t_s": 72.007468245,
+      "tpu_sends": 11310435
+    },
+    {
+      "completed": 76806,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3194,
+      "sink_dropped": 0,
+      "sink_emitted": 393612,
+      "t_s": 32.176603837,
+      "tpu_sends": 11336280
+    },
+    {
+      "completed": 76884,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3116,
+      "sink_dropped": 0,
+      "sink_emitted": 393768,
+      "t_s": 73.002519937,
+      "tpu_sends": 11404050
+    },
+    {
+      "completed": 76922,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 3078,
+      "sink_dropped": 0,
+      "sink_emitted": 393844,
+      "t_s": 33.182542347,
+      "tpu_sends": 11430867
+    },
+    {
+      "completed": 77015,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2985,
+      "sink_dropped": 0,
+      "sink_emitted": 394030,
+      "t_s": 74.002162821,
+      "tpu_sends": 11495619
+    },
+    {
+      "completed": 77017,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2983,
+      "sink_dropped": 0,
+      "sink_emitted": 394034,
+      "t_s": 34.188383288,
+      "tpu_sends": 11522052
+    },
+    {
+      "completed": 77127,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2873,
+      "sink_dropped": 0,
+      "sink_emitted": 394254,
+      "t_s": 75.00196508,
+      "tpu_sends": 11583351
+    },
+    {
+      "completed": 77177,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2823,
+      "sink_dropped": 0,
+      "sink_emitted": 394354,
+      "t_s": 35.204818156,
+      "tpu_sends": 11608524
+    },
+    {
+      "completed": 77272,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2728,
+      "sink_dropped": 0,
+      "sink_emitted": 394544,
+      "t_s": 76.002368468,
+      "tpu_sends": 11666934
+    },
+    {
+      "completed": 77272,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2728,
+      "sink_dropped": 0,
+      "sink_emitted": 394544,
+      "t_s": 36.209752896,
+      "tpu_sends": 11685507
+    },
+    {
+      "completed": 77369,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2631,
+      "sink_dropped": 0,
+      "sink_emitted": 394738,
+      "t_s": 77.002475087,
+      "tpu_sends": 11747205
+    },
+    {
+      "completed": 77412,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2588,
+      "sink_dropped": 0,
+      "sink_emitted": 394824,
+      "t_s": 37.215722037,
+      "tpu_sends": 11765673
+    },
+    {
+      "completed": 77494,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2506,
+      "sink_dropped": 0,
+      "sink_emitted": 394988,
+      "t_s": 78.002103639,
+      "tpu_sends": 11824194
+    },
+    {
+      "completed": 77500,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2500,
+      "sink_dropped": 0,
+      "sink_emitted": 395000,
+      "t_s": 38.219930018,
+      "tpu_sends": 11844690
+    },
+    {
+      "completed": 77589,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2411,
+      "sink_dropped": 0,
+      "sink_emitted": 395178,
+      "t_s": 79.002599467,
+      "tpu_sends": 11897997
+    },
+    {
+      "completed": 77638,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2362,
+      "sink_dropped": 0,
+      "sink_emitted": 395276,
+      "t_s": 39.225877902,
+      "tpu_sends": 11919402
+    },
+    {
+      "completed": 77726,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2274,
+      "sink_dropped": 0,
+      "sink_emitted": 395452,
+      "t_s": 80.002097768,
+      "tpu_sends": 11968041
+    },
+    {
+      "completed": 77739,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2261,
+      "sink_dropped": 0,
+      "sink_emitted": 395478,
+      "t_s": 40.230055679,
+      "tpu_sends": 11988390
+    },
+    {
+      "completed": 77856,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2144,
+      "sink_dropped": 0,
+      "sink_emitted": 395712,
+      "t_s": 81.001794815,
+      "tpu_sends": 12034134
+    },
+    {
+      "completed": 77917,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2083,
+      "sink_dropped": 0,
+      "sink_emitted": 395834,
+      "t_s": 41.235940798,
+      "tpu_sends": 12053064
+    },
+    {
+      "completed": 77990,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 2010,
+      "sink_dropped": 0,
+      "sink_emitted": 395980,
+      "t_s": 82.001725616,
+      "tpu_sends": 12096036
+    },
+    {
+      "completed": 78002,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1998,
+      "sink_dropped": 0,
+      "sink_emitted": 396004,
+      "t_s": 42.240506417,
+      "tpu_sends": 12114018
+    },
+    {
+      "completed": 78081,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1919,
+      "sink_dropped": 0,
+      "sink_emitted": 396162,
+      "t_s": 83.002162333,
+      "tpu_sends": 12154809
+    },
+    {
+      "completed": 78140,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1860,
+      "sink_dropped": 0,
+      "sink_emitted": 396280,
+      "t_s": 43.246246115,
+      "tpu_sends": 12171726
+    },
+    {
+      "completed": 78218,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1782,
+      "sink_dropped": 0,
+      "sink_emitted": 396436,
+      "t_s": 84.001762352,
+      "tpu_sends": 12209964
+    },
+    {
+      "completed": 78234,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1766,
+      "sink_dropped": 0,
+      "sink_emitted": 396468,
+      "t_s": 44.251923343,
+      "tpu_sends": 12225858
+    },
+    {
+      "completed": 78350,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1650,
+      "sink_dropped": 0,
+      "sink_emitted": 396700,
+      "t_s": 85.001811126,
+      "tpu_sends": 12261288
+    },
+    {
+      "completed": 78390,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1610,
+      "sink_dropped": 0,
+      "sink_emitted": 396780,
+      "t_s": 45.25699089,
+      "tpu_sends": 12275898
+    },
+    {
+      "completed": 78464,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1536,
+      "sink_dropped": 0,
+      "sink_emitted": 396928,
+      "t_s": 86.001666881,
+      "tpu_sends": 12308925
+    },
+    {
+      "completed": 78475,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1525,
+      "sink_dropped": 0,
+      "sink_emitted": 396950,
+      "t_s": 46.264462222,
+      "tpu_sends": 12322650
+    },
+    {
+      "completed": 78568,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1432,
+      "sink_dropped": 0,
+      "sink_emitted": 397136,
+      "t_s": 87.001764199,
+      "tpu_sends": 12353154
+    },
+    {
+      "completed": 78620,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1380,
+      "sink_dropped": 0,
+      "sink_emitted": 397240,
+      "t_s": 47.270957124,
+      "tpu_sends": 12365730
+    },
+    {
+      "completed": 78711,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1289,
+      "sink_dropped": 0,
+      "sink_emitted": 397422,
+      "t_s": 88.002536912,
+      "tpu_sends": 12393759
+    },
+    {
+      "completed": 78721,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1279,
+      "sink_dropped": 0,
+      "sink_emitted": 397442,
+      "t_s": 48.275480596,
+      "tpu_sends": 12405270
+    },
+    {
+      "completed": 78813,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1187,
+      "sink_dropped": 0,
+      "sink_emitted": 397626,
+      "t_s": 89.002017873,
+      "tpu_sends": 12430761
+    },
+    {
+      "completed": 78854,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1146,
+      "sink_dropped": 0,
+      "sink_emitted": 397708,
+      "t_s": 49.281689575,
+      "tpu_sends": 12441198
+    },
+    {
+      "completed": 78952,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1048,
+      "sink_dropped": 0,
+      "sink_emitted": 397904,
+      "t_s": 90.00169667,
+      "tpu_sends": 12464289
+    },
+    {
+      "completed": 78955,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 1045,
+      "sink_dropped": 0,
+      "sink_emitted": 397910,
+      "t_s": 50.286933333,
+      "tpu_sends": 12473694
+    },
+    {
+      "completed": 79063,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 937,
+      "sink_dropped": 0,
+      "sink_emitted": 398126,
+      "t_s": 91.002411375,
+      "tpu_sends": 12494067
+    },
+    {
+      "completed": 79117,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 883,
+      "sink_dropped": 0,
+      "sink_emitted": 398234,
+      "t_s": 51.291801612,
+      "tpu_sends": 12502176
+    },
+    {
+      "completed": 79208,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 792,
+      "sink_dropped": 0,
+      "sink_emitted": 398416,
+      "t_s": 92.002172855,
+      "tpu_sends": 12519774
+    },
+    {
+      "completed": 79220,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 780,
+      "sink_dropped": 0,
+      "sink_emitted": 398440,
+      "t_s": 52.297882575,
+      "tpu_sends": 12526794
+    },
+    {
+      "completed": 79323,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 677,
+      "sink_dropped": 0,
+      "sink_emitted": 398646,
+      "t_s": 93.002538759,
+      "tpu_sends": 12541683
+    },
+    {
+      "completed": 79364,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 636,
+      "sink_dropped": 0,
+      "sink_emitted": 398728,
+      "t_s": 53.305636471,
+      "tpu_sends": 12547530
+    },
+    {
+      "completed": 79463,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 537,
+      "sink_dropped": 0,
+      "sink_emitted": 398926,
+      "t_s": 94.001442306,
+      "tpu_sends": 12559833
+    },
+    {
+      "completed": 79471,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 529,
+      "sink_dropped": 0,
+      "sink_emitted": 398942,
+      "t_s": 54.311554504,
+      "tpu_sends": 12564594
+    },
+    {
+      "completed": 79579,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 421,
+      "sink_dropped": 0,
+      "sink_emitted": 399158,
+      "t_s": 95.005764704,
+      "tpu_sends": 12574119
+    },
+    {
+      "completed": 79626,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 374,
+      "sink_dropped": 0,
+      "sink_emitted": 399252,
+      "t_s": 55.317173864,
+      "tpu_sends": 12577710
+    },
+    {
+      "completed": 79701,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 299,
+      "sink_dropped": 0,
+      "sink_emitted": 399402,
+      "t_s": 96.00157795,
+      "tpu_sends": 12584457
+    },
+    {
+      "completed": 79729,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 271,
+      "sink_dropped": 0,
+      "sink_emitted": 399458,
+      "t_s": 56.323845461,
+      "tpu_sends": 12587676
+    },
+    {
+      "completed": 79824,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 176,
+      "sink_dropped": 0,
+      "sink_emitted": 399648,
+      "t_s": 97.002371269,
+      "tpu_sends": 12591504
+    },
+    {
+      "completed": 79876,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 124,
+      "sink_dropped": 0,
+      "sink_emitted": 399752,
+      "t_s": 57.328402638,
+      "tpu_sends": 12593148
+    },
+    {
+      "completed": 79979,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 21,
+      "sink_dropped": 0,
+      "sink_emitted": 399958,
+      "t_s": 98.001824887,
+      "tpu_sends": 12594348
+    },
+    {
+      "completed": 80000,
+      "durable_steps_executed": 160000,
+      "handler_entries": 80000,
+      "in_flight": 0,
+      "sink_dropped": 0,
+      "sink_emitted": 400000,
+      "t_s": 58.333753138,
+      "tpu_sends": 12594528
+    }
+  ],
+  "service_config": "region=us journal_mode=lean sink=Null slot_ms=400 fast_path=true emit_all_stages=true durable_commitment_wait=false journal_retention=300s workers=4",
+  "target": "workflow",
+  "verify": null
+}

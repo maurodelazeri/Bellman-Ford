@@ -1,0 +1,80 @@
+# Restate server profile for the sprayer benchmark.
+#
+# The defaults are tuned for general-purpose durable workflows. This workload is
+# not general purpose: tens of thousands of short-lived, independent invocations
+# that each hold an invoker slot for up to two minutes, and whose history is
+# worthless five minutes after they settle.
+
+bind-address = "0.0.0.0:5122"
+advertised-address = "http://127.0.0.1:5122/"
+
+cluster-name = "solana-spray"
+auto-provision = true
+
+# Partitions are the unit of parallelism *and* of ordering. Every invocation is
+# routed to a partition by key, and each partition processor is single-threaded,
+# so partition count caps how much of the machine Restate can use. More than a
+# few per core mostly buys RocksDB overhead.
+default-num-partitions = 12
+default-replication = 1
+
+log-filter = "warn,restate=warn"
+log-format = "compact"
+disable-telemetry = true
+
+# The whole point of the exercise: Restate is a working set, not an archive.
+# Once a transaction has settled and its events are in ClickHouse, Restate has
+# no reason to remember it. Five minutes is enough to survive an operator
+# looking at a failure, and it keeps the state machine's RocksDB tiny.
+default-journal-retention = "5m"
+default-idempotency-retention = "5m"
+default-workflow-completion-retention = "5m"
+
+[ingress]
+bind-address = "0.0.0.0:8080"
+
+[admin]
+bind-address = "0.0.0.0:9070"
+
+[worker]
+# Larger command batches amortise the per-batch cost of driving a partition,
+# which is what this workload generates a lot of.
+max-command-batch-size = 128
+
+# Retention is enforced by a periodic sweep, not on expiry. The default sweep
+# interval is one hour, so a five-minute `journal_retention` on the handler will
+# still leave completed invocations sitting in the state machine for up to an
+# hour — measured, not assumed. Set the sweep near the retention window or the
+# retention setting does not mean what it says.
+cleanup-interval = "1m"
+
+[worker.invoker]
+# The single most important setting for this workload. The default of 1000 caps
+# concurrently *executing* invocations; a sprayer holding 10k transactions in
+# flight for two minutes each will sit at the cap and queue everything else,
+# which looks exactly like "Restate is slow" while Restate is idle.
+concurrent-invocations-limit = 40000
+
+# In `lean` journal mode one durable step spans the entire spray phase, so from
+# the invoker's point of view the handler goes quiet for up to two minutes.
+# Anything under that and Restate will ask the handler to suspend mid-spray.
+inactivity-timeout = "5m"
+abort-timeout = "10m"
+
+# Bigger in-memory queue so a spike is absorbed rather than rejected.
+in-memory-queue-length-limit = 200000
+memory-limit = "3.0 GiB"
+
+[bifrost]
+# Single node: the local loglet skips the replicated-loglet protocol entirely.
+# Switch back to "replicated" when testing a real multi-node cluster.
+default-provider = "local"
+
+[bifrost.local]
+# Every durable step in every transaction lands here, so this is the hot write
+# path for the entire system. Batch by *count* only: adding a linger window
+# (`writer-batch-commit-duration`) was measured to add ~2ms to every submission
+# for no throughput gain at these rates, because appends already arrive faster
+# than the linger window.
+writer-batch-commit-count = 5000
+writer-batch-commit-duration = "0s"
