@@ -1,0 +1,22 @@
+[package]
+name = "spray-bench"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "spray-bench"
+path = "src/main.rs"
+
+[dependencies]
+spray-core = { path = "../spray-core" }
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+clap.workspace = true
+hyper.workspace = true
+hyper-util.workspace = true
+http-body-util.workspace = true
+bytes.workspace = true
+hdrhistogram.workspace = true

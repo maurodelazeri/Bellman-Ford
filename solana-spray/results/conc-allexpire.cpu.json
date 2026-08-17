@@ -1,0 +1,15 @@
+{
+  "restate-server": {
+    "cpu_seconds": 103.04,
+    "millicores_per_tx": 3.8163
+  },
+  "spray-service": {
+    "cpu_seconds": 96.64,
+    "millicores_per_tx": 3.5793
+  },
+  "spray-bench": {
+    "cpu_seconds": 0.0,
+    "millicores_per_tx": 0.0
+  },
+  "completed_tx": 27000
+}

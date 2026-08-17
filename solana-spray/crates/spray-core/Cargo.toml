@@ -1,0 +1,13 @@
+[package]
+name = "spray-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+bytes.workspace = true
+anyhow.workspace = true
+tracing.workspace = true

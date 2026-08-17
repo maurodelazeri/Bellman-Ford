@@ -1,0 +1,419 @@
+== spray-bench ==
+service: region=us journal_mode=lean sink=File slot_ms=400 fast_path=true emit_all_stages=true durable_commitment_wait=false journal_retention=300s workers=4
+target=workflow rate=400/s spike=0/s duration=30s validity_slots=150 payload=512B conns=8
+
+-- submission phase (30.0s) --
+scheduled=12000 submitted=12000 acked=11999 rejected=0 errors=0 backpressured=0
+achieved submit rate: 400/s
+ingress ack latency (us): p50=1632 p90=2349 p99=20847 p999=39871 max=60479
+status codes: [(202, 11999)]
+
+-- drain phase (waiting for lifecycles to settle) --
+  t=   60s completed=0/11999 in_flight=60 settle_rate=0/s
+  t=   61s completed=55/11999 in_flight=356 settle_rate=55/s
+  t=   62s completed=320/11999 in_flight=518 settle_rate=264/s
+  t=   63s completed=583/11999 in_flight=703 settle_rate=262/s
+  t=   64s completed=944/11999 in_flight=731 settle_rate=359/s
+  t=   65s completed=1207/11999 in_flight=894 settle_rate=262/s
+  t=   66s completed=1621/11999 in_flight=890 settle_rate=412/s
+  t=   67s completed=1917/11999 in_flight=1002 settle_rate=295/s
+  t=   68s completed=2344/11999 in_flight=979 settle_rate=425/s
+  t=   69s completed=2612/11999 in_flight=1085 settle_rate=267/s
+  t=   70s completed=3019/11999 in_flight=1014 settle_rate=405/s
+  t=   71s completed=3246/11999 in_flight=1093 settle_rate=226/s
+  t=   72s completed=3551/11999 in_flight=1028 settle_rate=304/s
+  t=   73s completed=3746/11999 in_flight=1049 settle_rate=194/s
+  t=   74s completed=3962/11999 in_flight=1001 settle_rate=215/s
+  t=   75s completed=4084/11999 in_flight=1015 settle_rate=122/s
+  t=   76s completed=4360/11999 in_flight=822 settle_rate=275/s
+  t=   77s completed=4440/11999 in_flight=786 settle_rate=80/s
+  t=   78s completed=4524/11999 in_flight=736 settle_rate=84/s
+  t=   79s completed=4564/11999 in_flight=709 settle_rate=40/s
+  t=   80s completed=4603/11999 in_flight=673 settle_rate=39/s
+  t=   81s completed=4625/11999 in_flight=651 settle_rate=22/s
+  t=   82s completed=4653/11999 in_flight=623 settle_rate=28/s
+  t=   83s completed=4679/11999 in_flight=597 settle_rate=26/s
+  t=   84s completed=4694/11999 in_flight=582 settle_rate=15/s
+  t=   85s completed=4729/11999 in_flight=547 settle_rate=35/s
+  t=   86s completed=4744/11999 in_flight=532 settle_rate=15/s
+  t=   87s completed=4770/11999 in_flight=506 settle_rate=26/s
+  t=   88s completed=4782/11999 in_flight=494 settle_rate=12/s
+  t=   89s completed=4802/11999 in_flight=474 settle_rate=20/s
+  t=   90s completed=4817/11999 in_flight=459 settle_rate=15/s
+  t=   91s completed=4831/11999 in_flight=445 settle_rate=14/s
+  t=   92s completed=4848/11999 in_flight=428 settle_rate=17/s
+  t=   93s completed=4859/11999 in_flight=417 settle_rate=11/s
+  t=   94s completed=4863/11999 in_flight=413 settle_rate=4/s
+  t=   95s completed=4869/11999 in_flight=407 settle_rate=6/s
+  t=   96s completed=4870/11999 in_flight=406 settle_rate=1/s
+  t=   97s completed=4873/11999 in_flight=403 settle_rate=3/s
+  t=   98s completed=4874/11999 in_flight=402 settle_rate=1/s
+  t=   99s completed=4874/11999 in_flight=402 settle_rate=0/s
+  t=  100s completed=4875/11999 in_flight=401 settle_rate=1/s
+  t=  101s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  102s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  103s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  104s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  105s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  106s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  107s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  108s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  109s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  110s completed=4875/11999 in_flight=401 settle_rate=0/s
+  t=  111s completed=4876/11999 in_flight=401 settle_rate=1/s
+  t=  112s completed=4877/11999 in_flight=401 settle_rate=1/s
+  t=  113s completed=4883/11999 in_flight=401 settle_rate=6/s
+  t=  114s completed=4891/11999 in_flight=404 settle_rate=8/s
+  t=  115s completed=4900/11999 in_flight=411 settle_rate=9/s
+  t=  116s completed=4916/11999 in_flight=420 settle_rate=16/s
+  t=  117s completed=4950/11999 in_flight=438 settle_rate=34/s
+  t=  118s completed=4988/11999 in_flight=464 settle_rate=38/s
+  t=  119s completed=5070/11999 in_flight=456 settle_rate=82/s
+  t=  120s completed=5147/11999 in_flight=468 settle_rate=77/s
+  t=  121s completed=5266/11999 in_flight=447 settle_rate=118/s
+  t=  122s completed=5344/11999 in_flight=457 settle_rate=78/s
+  t=  123s completed=5468/11999 in_flight=452 settle_rate=123/s
+  t=  124s completed=5578/11999 in_flight=438 settle_rate=109/s
+  t=  125s completed=5697/11999 in_flight=417 settle_rate=118/s
+  t=  126s completed=5798/11999 in_flight=398 settle_rate=101/s
+  t=  127s completed=5948/11999 in_flight=367 settle_rate=149/s
+  t=  128s completed=6062/11999 in_flight=349 settle_rate=114/s
+  t=  130s completed=6214/11999 in_flight=293 settle_rate=151/s
+  t=  131s completed=6351/11999 in_flight=257 settle_rate=136/s
+  t=  132s completed=6463/11999 in_flight=226 settle_rate=112/s
+  t=  133s completed=6580/11999 in_flight=185 settle_rate=117/s
+  t=  134s completed=6650/11999 in_flight=187 settle_rate=70/s
+  t=  135s completed=6729/11999 in_flight=176 settle_rate=79/s
+  t=  136s completed=6787/11999 in_flight=180 settle_rate=58/s
+  t=  137s completed=6847/11999 in_flight=154 settle_rate=60/s
+  t=  138s completed=6873/11999 in_flight=152 settle_rate=26/s
+  t=  139s completed=6893/11999 in_flight=135 settle_rate=20/s
+  t=  140s completed=6895/11999 in_flight=133 settle_rate=2/s
+  t=  141s completed=6901/11999 in_flight=127 settle_rate=6/s
+  t=  142s completed=6905/11999 in_flight=123 settle_rate=4/s
+  t=  143s completed=6912/11999 in_flight=116 settle_rate=7/s
+  t=  144s completed=6916/11999 in_flight=112 settle_rate=4/s
+  t=  145s completed=6917/11999 in_flight=111 settle_rate=1/s
+  t=  146s completed=6920/11999 in_flight=108 settle_rate=3/s
+  t=  147s completed=6924/11999 in_flight=104 settle_rate=4/s
+  t=  148s completed=6928/11999 in_flight=100 settle_rate=4/s
+  t=  149s completed=6930/11999 in_flight=98 settle_rate=2/s
+  t=  150s completed=6931/11999 in_flight=97 settle_rate=1/s
+  t=  151s completed=6934/11999 in_flight=94 settle_rate=3/s
+  t=  152s completed=6937/11999 in_flight=91 settle_rate=3/s
+  t=  153s completed=6938/11999 in_flight=90 settle_rate=1/s
+  t=  154s completed=6940/11999 in_flight=88 settle_rate=2/s
+  t=  155s completed=6941/11999 in_flight=87 settle_rate=1/s
+  t=  156s completed=6941/11999 in_flight=87 settle_rate=0/s
+  t=  157s completed=6942/11999 in_flight=86 settle_rate=1/s
+  t=  158s completed=6943/11999 in_flight=85 settle_rate=1/s
+  t=  159s completed=6943/11999 in_flight=85 settle_rate=0/s
+  t=  160s completed=6944/11999 in_flight=84 settle_rate=1/s
+  t=  161s completed=6945/11999 in_flight=83 settle_rate=1/s
+  t=  162s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  163s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  164s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  165s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  166s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  167s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  168s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  169s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  170s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  171s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  172s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  173s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  174s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  175s completed=6945/11999 in_flight=83 settle_rate=0/s
+  t=  176s completed=6948/11999 in_flight=80 settle_rate=3/s
+  t=  177s completed=6949/11999 in_flight=79 settle_rate=1/s
+  t=  178s completed=6953/11999 in_flight=75 settle_rate=4/s
+  t=  179s completed=6956/11999 in_flight=72 settle_rate=3/s
+  t=  180s completed=6965/11999 in_flight=63 settle_rate=9/s
+  t=  181s completed=6968/11999 in_flight=60 settle_rate=3/s
+  t=  182s completed=6974/11999 in_flight=54 settle_rate=6/s
+  t=  183s completed=6974/11999 in_flight=54 settle_rate=0/s
+  t=  184s completed=6979/11999 in_flight=49 settle_rate=5/s
+  t=  185s completed=6982/11999 in_flight=46 settle_rate=3/s
+  t=  186s completed=6987/11999 in_flight=41 settle_rate=5/s
+  t=  187s completed=6989/11999 in_flight=39 settle_rate=2/s
+  t=  188s completed=6995/11999 in_flight=33 settle_rate=6/s
+  t=  189s completed=6996/11999 in_flight=32 settle_rate=1/s
+  t=  190s completed=7005/11999 in_flight=23 settle_rate=9/s
+  t=  191s completed=7010/11999 in_flight=18 settle_rate=5/s
+  t=  192s completed=7015/11999 in_flight=13 settle_rate=5/s
+  t=  193s completed=7020/11999 in_flight=8 settle_rate=5/s
+  t=  194s completed=7026/11999 in_flight=2 settle_rate=6/s
+  t=  195s completed=7026/11999 in_flight=2 settle_rate=0/s
+  t=  196s completed=7027/11999 in_flight=1 settle_rate=1/s
+  t=  197s completed=7028/11999 in_flight=0 settle_rate=1/s
+  t=  198s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  199s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  200s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  201s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  202s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  203s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  204s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  205s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  206s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  207s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  208s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  209s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  210s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  211s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  212s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  213s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  214s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  215s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  216s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  217s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  218s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  219s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  220s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  221s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  222s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  223s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  224s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  225s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  226s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  227s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  228s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  229s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  230s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  231s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  232s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  233s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  234s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  235s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  236s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  237s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  238s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  239s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  240s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  241s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  242s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  243s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  244s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  245s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  246s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  247s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  248s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  249s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  250s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  251s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  252s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  253s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  254s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  255s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  256s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  257s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  258s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  259s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  260s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  261s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  262s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  263s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  264s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  265s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  266s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  267s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  268s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  269s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  270s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  271s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  272s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  273s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  274s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  275s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  276s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  277s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  278s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  279s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  280s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  281s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  282s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  283s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  284s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  285s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  286s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  287s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  288s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  289s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  290s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  291s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  292s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  293s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  294s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  295s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  296s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  297s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  298s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  299s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  300s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  301s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  302s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  303s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  304s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  305s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  306s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  307s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  308s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  309s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  310s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  311s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  312s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  313s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  314s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  315s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  316s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  317s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  318s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  319s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  320s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  321s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  322s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  323s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  324s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  325s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  326s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  327s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  328s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  329s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  330s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  331s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  332s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  334s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  335s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  336s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  337s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  338s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  339s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  340s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  341s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  342s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  343s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  344s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  345s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  346s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  347s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  348s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  349s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  350s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  351s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  352s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  353s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  354s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  355s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  356s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  357s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  358s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  359s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  360s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  361s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  362s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  363s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  364s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  365s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  366s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  367s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  368s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  369s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  370s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  371s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  372s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  373s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  374s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  375s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  376s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  377s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  378s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  379s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  380s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  381s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  382s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  383s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  384s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  385s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  386s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  387s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  388s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  389s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  390s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  391s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  392s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  393s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  394s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  395s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  396s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  397s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  398s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  399s completed=7028/11999 in_flight=0 settle_rate=0/s
+  t=  400s completed=7028/11999 in_flight=0 settle_rate=0/s
+
+-- service final --
+{
+  "bundles_completed": 0,
+  "cluster": {
+    "feed_pending": 0,
+    "landings": 6307,
+    "slot": 300000850,
+    "tpu_bytes": 669410304,
+    "tpu_sends": 1307442
+  },
+  "completed": 7028,
+  "config": "region=us journal_mode=lean sink=File slot_ms=400 fast_path=true emit_all_stages=true durable_commitment_wait=false journal_retention=300s workers=4",
+  "durable_steps_executed": 13017,
+  "durable_steps_journaled": 14056,
+  "handler_entries": 7028,
+  "in_flight": 0,
+  "journal_mode": "lean",
+  "journal_steps_per_tx": 2.0,
+  "latency": {
+    "durable_step": {
+      "count": 7028,
+      "max_us": 63953,
+      "mean_us": 3941.0,
+      "p50_us": 2048,
+      "p90_us": 8192,
+      "p999_us": 65536,
+      "p99_us": 65536
+    },
+    "time_to_first_send": {
+      "count": 7028,
+      "max_us": 165044007,
+      "mean_us": 90951182.0,
+      "p50_us": 134217728,
+      "p90_us": 268435456,
+      "p999_us": 268435456,
+      "p99_us": 268435456
+    },
+    "time_to_handler": {
+      "count": 7028,
+      "max_us": 165044007,
+      "mean_us": 90951182.0,
+      "p50_us": 134217728,
+      "p90_us": 268435456,
+      "p999_us": 268435456,
+      "p99_us": 268435456
+    }
+  },
+  "mean_e2e_ms": 97280.76163303926,
+  "outcomes": {
+    "dropped": 0,
+    "expired": 864,
+    "failed_on_chain": 181,
+    "landed": 5983
+  },
+  "sink": {
+    "batches": 17328,
+    "dropped": 0,
+    "emitted": 35140,
+    "write_micros": 2235767,
+    "written": 35140
+  },
+  "webhooks": {
+    "failed": 0,
+    "ok": 0
+  }
+}
+
+wrote /home/user/Bellman-Ford/solana-spray/results/crash-r400-k1-d75.json

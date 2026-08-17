@@ -1,0 +1,31 @@
+{
+  "complete": 12000,
+  "conflicting_terminal": {
+    "count": 0,
+    "sample": []
+  },
+  "duplicate_events": 3104,
+  "files": 2,
+  "inconsistent_duplicates": 0,
+  "lines": 63104,
+  "missing_prefix": {
+    "count": 0,
+    "sample": []
+  },
+  "missing_terminal": {
+    "count": 0,
+    "sample": []
+  },
+  "ok": true,
+  "outcomes": {
+    "confirmed": 10798,
+    "expired": 864,
+    "failed_on_chain": 338
+  },
+  "parse_errors": 0,
+  "transactions": 12000,
+  "unsettled": {
+    "count": 0,
+    "sample": []
+  }
+}

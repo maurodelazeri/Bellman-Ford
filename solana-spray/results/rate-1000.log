@@ -1,0 +1,138 @@
+== spray-bench ==
+service: region=us journal_mode=lean sink=Null slot_ms=400 fast_path=true emit_all_stages=true durable_commitment_wait=false journal_retention=300s workers=4
+target=workflow rate=1000/s spike=0/s duration=40s validity_slots=150 payload=512B conns=8
+
+-- submission phase (40.0s) --
+scheduled=40000 submitted=40000 acked=40000 rejected=0 errors=0 backpressured=0
+achieved submit rate: 999/s
+ingress ack latency (us): p50=2941 p90=10167 p99=24879 p999=48927 max=81535
+status codes: [(202, 40000)]
+
+-- drain phase (waiting for lifecycles to settle) --
+  t=    1s completed=36284/40000 in_flight=3716 settle_rate=577/s
+  t=    2s completed=36532/40000 in_flight=3468 settle_rate=247/s
+  t=    3s completed=36603/40000 in_flight=3397 settle_rate=71/s
+  t=    4s completed=36699/40000 in_flight=3301 settle_rate=96/s
+  t=    5s completed=36755/40000 in_flight=3245 settle_rate=56/s
+  t=    6s completed=36851/40000 in_flight=3149 settle_rate=95/s
+  t=    7s completed=36914/40000 in_flight=3086 settle_rate=63/s
+  t=    8s completed=36988/40000 in_flight=3012 settle_rate=74/s
+  t=    9s completed=37043/40000 in_flight=2957 settle_rate=55/s
+  t=   10s completed=37119/40000 in_flight=2881 settle_rate=76/s
+  t=   11s completed=37174/40000 in_flight=2826 settle_rate=55/s
+  t=   12s completed=37243/40000 in_flight=2757 settle_rate=67/s
+  t=   13s completed=37291/40000 in_flight=2709 settle_rate=48/s
+  t=   14s completed=37346/40000 in_flight=2654 settle_rate=55/s
+  t=   15s completed=37377/40000 in_flight=2623 settle_rate=31/s
+  t=   16s completed=37415/40000 in_flight=2585 settle_rate=38/s
+  t=   17s completed=37432/40000 in_flight=2568 settle_rate=17/s
+  t=   18s completed=37474/40000 in_flight=2526 settle_rate=42/s
+  t=   19s completed=37544/40000 in_flight=2456 settle_rate=70/s
+  t=   20s completed=37624/40000 in_flight=2376 settle_rate=80/s
+  t=   21s completed=37703/40000 in_flight=2297 settle_rate=79/s
+  t=   22s completed=37768/40000 in_flight=2232 settle_rate=65/s
+  t=   23s completed=37850/40000 in_flight=2150 settle_rate=82/s
+  t=   24s completed=37912/40000 in_flight=2088 settle_rate=62/s
+  t=   25s completed=37997/40000 in_flight=2003 settle_rate=85/s
+  t=   26s completed=38037/40000 in_flight=1963 settle_rate=40/s
+  t=   27s completed=38119/40000 in_flight=1881 settle_rate=82/s
+  t=   28s completed=38165/40000 in_flight=1835 settle_rate=46/s
+  t=   29s completed=38238/40000 in_flight=1762 settle_rate=73/s
+  t=   30s completed=38279/40000 in_flight=1721 settle_rate=41/s
+  t=   31s completed=38344/40000 in_flight=1656 settle_rate=65/s
+  t=   32s completed=38389/40000 in_flight=1611 settle_rate=45/s
+  t=   33s completed=38445/40000 in_flight=1555 settle_rate=56/s
+  t=   34s completed=38486/40000 in_flight=1514 settle_rate=41/s
+  t=   35s completed=38573/40000 in_flight=1427 settle_rate=87/s
+  t=   36s completed=38638/40000 in_flight=1362 settle_rate=65/s
+  t=   37s completed=38700/40000 in_flight=1300 settle_rate=62/s
+  t=   38s completed=38757/40000 in_flight=1243 settle_rate=57/s
+  t=   39s completed=38836/40000 in_flight=1164 settle_rate=79/s
+  t=   40s completed=38888/40000 in_flight=1112 settle_rate=52/s
+  t=   41s completed=38958/40000 in_flight=1042 settle_rate=70/s
+  t=   42s completed=39007/40000 in_flight=993 settle_rate=49/s
+  t=   43s completed=39073/40000 in_flight=927 settle_rate=66/s
+  t=   44s completed=39133/40000 in_flight=867 settle_rate=60/s
+  t=   45s completed=39198/40000 in_flight=802 settle_rate=65/s
+  t=   46s completed=39260/40000 in_flight=740 settle_rate=62/s
+  t=   47s completed=39330/40000 in_flight=670 settle_rate=70/s
+  t=   48s completed=39379/40000 in_flight=621 settle_rate=49/s
+  t=   49s completed=39458/40000 in_flight=542 settle_rate=79/s
+  t=   50s completed=39504/40000 in_flight=496 settle_rate=46/s
+  t=   51s completed=39578/40000 in_flight=422 settle_rate=74/s
+  t=   52s completed=39629/40000 in_flight=371 settle_rate=51/s
+  t=   53s completed=39707/40000 in_flight=293 settle_rate=78/s
+  t=   54s completed=39755/40000 in_flight=245 settle_rate=48/s
+  t=   55s completed=39829/40000 in_flight=171 settle_rate=74/s
+  t=   56s completed=39870/40000 in_flight=130 settle_rate=41/s
+  t=   57s completed=39939/40000 in_flight=61 settle_rate=69/s
+  t=   58s completed=39992/40000 in_flight=8 settle_rate=53/s
+
+-- service final --
+{
+  "bundles_completed": 0,
+  "cluster": {
+    "feed_pending": 0,
+    "landings": 37550,
+    "slot": 300000247,
+    "tpu_bytes": 3259766784,
+    "tpu_sends": 6366732
+  },
+  "completed": 40000,
+  "config": "region=us journal_mode=lean sink=Null slot_ms=400 fast_path=true emit_all_stages=true durable_commitment_wait=false journal_retention=300s workers=4",
+  "durable_steps_executed": 80000,
+  "durable_steps_journaled": 80000,
+  "handler_entries": 40000,
+  "in_flight": 0,
+  "journal_mode": "lean",
+  "journal_steps_per_tx": 2.0,
+  "latency": {
+    "durable_step": {
+      "count": 40000,
+      "max_us": 130619,
+      "mean_us": 7343.0,
+      "p50_us": 4096,
+      "p90_us": 32768,
+      "p999_us": 131072,
+      "p99_us": 65536
+    },
+    "time_to_first_send": {
+      "count": 40000,
+      "max_us": 131338,
+      "mean_us": 5477.0,
+      "p50_us": 4096,
+      "p90_us": 16384,
+      "p999_us": 65536,
+      "p99_us": 32768
+    },
+    "time_to_handler": {
+      "count": 40000,
+      "max_us": 131337,
+      "mean_us": 5476.0,
+      "p50_us": 4096,
+      "p90_us": 16384,
+      "p999_us": 65536,
+      "p99_us": 32768
+    }
+  },
+  "mean_e2e_ms": 5484.063612825,
+  "outcomes": {
+    "dropped": 0,
+    "expired": 2450,
+    "failed_on_chain": 1204,
+    "landed": 36346
+  },
+  "sink": {
+    "batches": 93248,
+    "dropped": 0,
+    "emitted": 200000,
+    "write_micros": 0,
+    "written": 200000
+  },
+  "webhooks": {
+    "failed": 0,
+    "ok": 0
+  }
+}
+
+wrote /home/user/Bellman-Ford/solana-spray/results/rate-1000.json

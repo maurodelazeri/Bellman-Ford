@@ -1,0 +1,3 @@
+# Build output only. `results/` is checked in on purpose: it is the evidence
+# behind the numbers in the README.
+target/
