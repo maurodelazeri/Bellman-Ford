@@ -1,0 +1,3 @@
+realbatch-off-2000 durable_settle=0 linger=2000ms -> ok=False tx=8000 complete=7999 unsettled=1 missing_terminal=1
+realbatch-on-2000 durable_settle=1 linger=2000ms -> ok=True tx=8000 complete=8000 unsettled=0 missing_terminal=0
+DONE

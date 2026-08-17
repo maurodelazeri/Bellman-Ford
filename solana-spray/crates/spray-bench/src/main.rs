@@ -28,7 +28,7 @@ enum Cmd {
     /// Check event-trail completeness for a finished run.
     Verify {
         /// Sink path prefix, matching SPRAY_SINK_PATH.
-        #[arg(long, default_value = "/var/spray/events")]
+        #[arg(long, default_value = ".run/service/events")]
         prefix: String,
     },
     /// Serve a webhook endpoint that 200s everything, for the callback path.

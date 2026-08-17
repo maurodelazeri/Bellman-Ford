@@ -1,13 +1,13 @@
 {
-  "complete": 12000,
+  "complete": 8000,
   "conflicting_terminal": {
     "count": 0,
     "sample": []
   },
-  "duplicate_events": 7976,
+  "duplicate_events": 2393,
   "files": 2,
   "inconsistent_duplicates": 0,
-  "lines": 67976,
+  "lines": 42393,
   "missing_prefix": {
     "count": 0,
     "sample": []
@@ -18,12 +18,12 @@
   },
   "ok": true,
   "outcomes": {
-    "confirmed": 10873,
-    "expired": 741,
-    "failed_on_chain": 386
+    "confirmed": 7249,
+    "expired": 496,
+    "failed_on_chain": 255
   },
   "parse_errors": 0,
-  "transactions": 12000,
+  "transactions": 8000,
   "unsettled": {
     "count": 0,
     "sample": []

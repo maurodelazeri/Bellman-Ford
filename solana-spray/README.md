@@ -44,21 +44,33 @@ crates/spray-service/   the Restate endpoint
   services.rs           TxWorkflow / TxService / BundleService
 crates/spray-bench/     open-loop load generator, drain watcher, trail verifier
 config/restate-bench.toml   tuned server profile, every setting explained
-scripts/                up / sweep / crash-test / retention-test / bundle-test
+scripts/                bootstrap / up / sweep / crash-test / retention-test / bundle-test
 results/                raw JSON from the runs quoted below
+vendor/                 downloaded restate-server (gitignored)
+.run/                   all runtime state: RocksDB, event files, logs (gitignored)
 ```
 
 ## Running it
 
+Self-contained: `bootstrap.sh` downloads `restate-server` into `vendor/`, and
+all runtime state (Restate's RocksDB, event files, logs) lives in `.run/`.
+Nothing is installed system-wide and nothing is written outside this directory,
+so `rm -rf .run vendor target` puts the machine back exactly as it was.
+
 ```bash
+./scripts/bootstrap.sh             # fetch restate-server into vendor/
 cargo build --release
 ./scripts/up.sh                    # restate-server + service + register
+
 ./scripts/sweep.sh my-run SPRAY_JOURNAL_MODE=lean -- --rate 1000 --duration-s 40
-./scripts/crash-test.sh 400 30 2   # SIGKILL mid-flight, verify trails
+./scripts/crash-test.sh 400 24 2 5 # SIGKILL mid-flight, verify trails
 ./scripts/retention-test.sh 60     # prove Restate forgets settled work
 ./scripts/bundle-test.sh
 python3 scripts/report.py
 ```
+
+`bootstrap.sh` prefers the official release tarball and falls back to the
+container image if GitHub releases are unreachable.
 
 ---
 
@@ -74,6 +86,7 @@ merely wasteful.
 | Compute the expiry deadline | **yes** | `submit_slot` must not move on replay, or a crash silently grants a fresh lease |
 | Spray at leaders for two minutes | **no** | a signed transaction is idempotent on chain; re-spraying after a crash is correct and free |
 | Emit a lifecycle event | **no** | events carry a deterministic `(tx_id, seq)`; the sink dedups |
+| Confirm the *final* event reached the sink | **yes**, but not journaled | replay covers every event except the last; see below |
 | Wait out commitment lag | **no** | it is a 400ms wall-clock wait; a durable timer costs more than the wait |
 | Record the spray outcome | **yes** | this is the fact everything downstream branches on |
 | Deliver the webhook | **yes** | not idempotent at the receiver; needs at-least-once, bounded |
@@ -89,8 +102,59 @@ keys and the sink collapses the duplicates. The completeness guarantee comes
 from determinism, not from durability — so it costs nothing.
 
 The verifier checks exactly this and reports duplicates separately from gaps.
-The crash runs below show **thousands of duplicates and zero gaps**, which is the
-result that proves the trade is sound.
+
+### ...except the tail, which is a real but narrow window
+
+That argument has a hole: **replay only covers an invocation that runs again.**
+One that has already completed never will, so any of its events still sitting in
+the writer's buffer when the process is killed are gone for good.
+
+The window is demonstrated, in isolation and end to end:
+
+* a unit test shows a plain `emit` leaves the event in memory, unwritten, until
+  the batch flushes;
+* with the sink batching over a 2s window and a SIGKILL mid-flight, one
+  transaction in 8,000 lost its terminal *and* settled events, leaving a trail
+  that stopped at `spraying` — the exact failure this exercise exists to
+  prevent. Re-running with the fix on: 8,000 / 8,000.
+
+The fix costs no journal appends. Restate does not mark an invocation complete
+until its handler returns, so the handler waits for the sink to confirm the
+`Settled` event *before* returning. Either the flush lands, or the handler never
+returned and Restate replays and re-emits. On timeout the handler fails
+deliberately, so Restate retries rather than letting a truncated record stand. A
+transaction's events all hash to one sink shard, so one await at the end covers
+its whole trail, and it is off the critical path — by then the transaction has
+already landed or expired.
+
+`SPRAY_DURABLE_SETTLE=0` restores the broken behaviour so the failure can be
+reproduced rather than taken on faith.
+
+#### Two corrections worth recording
+
+I originally reported this section as "12,000 / 12,000 gapless, which proves the
+trade is sound." Two things were wrong with that.
+
+**The first failure I saw had a different cause than I assigned it.** A crash run
+showed 13 transactions stuck at `spraying`, and I attributed it to buffer loss.
+It was almost certainly the *verifier running too early*: the old wait loop
+stopped after a single five-second quiet poll with `in_flight == 0`, which is
+exactly the state that holds while Restate is backing off before re-dispatching
+after a kill. The loop now requires several consecutive quiet polls *and* zero
+non-completed invocations according to Restate itself, which is the only
+authority on the question. Six subsequent runs with the durable settle disabled
+never reproduced the 13.
+
+**The buffer window was smaller than the config claimed.** `batch_linger_ms`
+did nothing: the writer waited on `recv_many`, which returns as soon as *one*
+message is available, so every "batch" was whatever happened to be queued at
+that instant. The knob is now an explicit deadline around the gather, which is
+both what the setting always claimed and what makes the durability window real
+enough to test. That is why the loss only reproduces after fixing the batching:
+before, the exposure was microseconds.
+
+Net: the tail window is real and worth closing, and it is cheap to close. But it
+was not the cause of the one failure I originally blamed it for.
 
 ### Fast path: packets before paperwork
 
@@ -164,20 +228,29 @@ sized machine per region.
 
 ### 4. Crash recovery — the requirement that matters
 
-| Test | Submitted | Kills | Downtime | Complete trails | Gaps | Duplicates | Inconsistent |
+Every run below SIGKILLs the service mid-flight, restarts it, and then verifies
+every transaction's event trail. "Gaps" counts trails missing a mandatory stage;
+"dups" counts events re-emitted by replay, which is the expected and desired
+signature of the design.
+
+| Run | Submitted | Kills | Downtime | Complete trails | Gaps | Dups | Inconsistent |
 |---|---|---|---|---|---|---|---|
-| `crash-r400-k2` | 12,000 | 2 | 3s each | **12,000** | **0** | 7,976 | **0** |
-| `crash-r400-k1-d75` | 12,000 | 1 | **75s** | **12,000** | **0** | 3,104 | **0** |
-| `verify-1k` (no crash) | 40,000 | 0 | — | **40,000** | **0** | 0 | 0 |
+| default settings | 9,600 | 2 | 5s | **9,600** | **0** | 7,647 | **0** |
+| default settings ×3 earlier trials | 9,600 each | 2 | 5s | **9,600** each | **0** | ~7,300 | **0** |
+| **75s outage** | 12,000 | 1 | **75s** | **12,000** | **0** | 3,104 | **0** |
+| 40,000 tx, no crash | 40,001 | 0 | — | **40,001** | **0** | 0 | 0 |
+| 2s sink batching, **`DURABLE_SETTLE=0`** | 8,000 | 1 | 5s | 7,999 | **1** | 2,378 | 0 |
+| 2s sink batching, `DURABLE_SETTLE=1` | 8,000 | 1 | 5s | **8,000** | **0** | 2,393 | 0 |
 
-Zero missing prefixes, zero missing terminals, zero unsettled records, zero
-conflicting outcomes — across every run.
+The last two rows are the controlled pair described above: with the terminal
+event unconfirmed, one transaction in 8,000 lost its outcome and settled events
+and was left stopped at `spraying`. With the confirmation in place, none were.
 
-The 75-second outage is the scenario described verbatim in the brief: the system
-goes dark, transactions expire on chain while it is down, and on restart they
-must still walk to a final state rather than vanish. Expiry rose from 6.2% to
-7.2% — exactly the transactions that would have landed during the outage — and
-**every one of them produced a full trail ending in `settled`.**
+The 75-second outage is the scenario from the brief verbatim: the system goes
+dark, transactions expire on chain while it is down, and on restart they must
+still walk to a final state rather than vanish. Expiry rose from 6.2% to 7.2% —
+exactly the transactions that would have landed during the outage — and every
+one produced a full trail ending in `settled`.
 
 ### 5. Retention — and a trap worth knowing about
 
@@ -202,6 +275,10 @@ meaningful signal.
   not the reason to give up a free status API.
 - **Webhooks:** 3,000/3,000 delivered at 20% attach rate; adds exactly 1 journal
   step to the transactions that use one (2.0 → 2.2 steps/tx average).
+- **Sink batching:** fixing `batch_linger_ms` to be a real deadline took the
+  file sink from 2.3 to 8.3 events per write, and cut its CPU roughly threefold
+  (13.8s → 4.7s of write time per 200k events) with no drops and no unconfirmed
+  terminal events.
 - **Bundles:** sequential correctly aborts the tail on the first failure
   (`aborted_after: 1`); all-at-once dispatches in **32ms** and lets each member
   own its own lifecycle and trail.

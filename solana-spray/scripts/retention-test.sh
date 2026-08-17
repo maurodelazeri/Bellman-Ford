@@ -28,10 +28,10 @@ echo "retention test: retention=${RETENTION}s count=$COUNT"
 echo "=========================================================="
 
 start_restate fresh
-stop_service
-SPRAY_JOURNAL_RETENTION_S="$RETENTION" SPRAY_WORKFLOW_RETENTION_S="$RETENTION" \
-  SPRAY_SINK=null setsid nohup "$BIN_SERVICE" > /var/spray/service.log 2>&1 < /dev/null &
-wait_for "http://$STATS/health" "spray-service"
+start_service \
+  SPRAY_JOURNAL_RETENTION_S="$RETENTION" \
+  SPRAY_WORKFLOW_RETENTION_S="$RETENTION" \
+  SPRAY_SINK=null
 register_deployment > /dev/null
 echo "service: $(c "http://$STATS/config")"
 
@@ -39,7 +39,7 @@ BASE_DISK=$(du -sm "$RESTATE_DATA" | cut -f1)
 echo "disk before load: ${BASE_DISK}M   invocations: $(invocations)"
 
 "$BIN_BENCH" load --run-id retention --rate 200 --duration-s $((COUNT / 200)) \
-  --target workflow --drain-timeout-s 300 --connections 4 > /tmp/retention-load.log 2>&1
+  --target workflow --drain-timeout-s 300 --connections 4 > "$RUN_DIR/retention-load.log" 2>&1
 
 echo
 echo "load done. completed=$(c "http://$STATS/stats" | python3 -c 'import json,sys; print(json.load(sys.stdin)["completed"])')"

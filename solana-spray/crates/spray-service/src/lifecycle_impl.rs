@@ -269,15 +269,33 @@ impl Shared {
             None
         };
 
-        // The settle event closes the record. It is not journaled: on replay the
-        // whole trail is re-emitted with identical keys and the sink collapses
-        // it. That is what makes the trail gapless without paying for it.
-        self.sink.emit(trail.event(
+        // The settle event closes the record, and it is the one emission that
+        // must be confirmed before we return.
+        //
+        // Everything earlier is covered by replay: if this invocation runs
+        // again, it re-emits the whole trail with identical keys. The tail has
+        // no such cover, because a completed invocation never runs again — so
+        // an event still buffered in the writer when the process dies would be
+        // lost for good. Restate does not mark the invocation complete until
+        // this handler returns, so waiting here converts that at-most-once tail
+        // into at-least-once, and costs no journal append.
+        //
+        // On timeout we fail rather than return a truncated record: Restate
+        // retries, the trail is re-emitted, and the dedup key absorbs it.
+        let settled = trail.event(
             Stage::Settled,
             report.final_slot,
             journal_steps,
             Some(format!("outcome={:?}", report.outcome)),
-        ));
+        );
+        if self.cfg.durable_settle {
+            self.sink
+                .emit_durable(settled, self.cfg.settle_confirm_timeout)
+                .await
+                .map_err(HandlerError::from)?;
+        } else {
+            self.sink.emit(settled);
+        }
 
         let total_ms = report.elapsed_ms;
         stats.completed.fetch_add(1, Ordering::Relaxed);

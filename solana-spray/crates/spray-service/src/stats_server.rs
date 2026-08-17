@@ -108,6 +108,7 @@ pub fn snapshot(shared: &Shared) -> serde_json::Value {
             "dropped": sink.dropped,
             "batches": sink.batches,
             "write_micros": sink.write_micros,
+            "unconfirmed": sink.unconfirmed,
         },
     })
 }

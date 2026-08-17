@@ -13,8 +13,6 @@ set -euo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 NAME="$1"; shift
-RESULTS_DIR="${RESULTS_DIR:-$REPO_ROOT/results}"
-mkdir -p "$RESULTS_DIR"
 
 ENV_ARGS=()
 while [[ $# -gt 0 && "$1" != "--" ]]; do ENV_ARGS+=("$1"); shift; done
@@ -29,18 +27,14 @@ echo "=========================================================="
 
 start_restate fresh
 
-stop_service
-mkdir -p /var/spray
-rm -f /var/spray/events.*.jsonl
-# shellcheck disable=SC2086
-env "${ENV_ARGS[@]}" setsid nohup "$BIN_SERVICE" > /var/spray/service.log 2>&1 < /dev/null &
-wait_for "http://$STATS/health" "spray-service stats"
+rm -f "$EVENTS_PREFIX".*.jsonl
+start_service "${ENV_ARGS[@]}"
 register_deployment > /dev/null
 echo "service: $(c "http://$STATS/config")"
 
 # Record the machine's idle state so the report can say what headroom existed.
 LOADAVG_BEFORE=$(cut -d' ' -f1-3 /proc/loadavg)
-python3 "$REPO_ROOT/scripts/cpu.py" start "/tmp/cpu-$NAME.json"
+python3 "$PROJECT_ROOT/scripts/cpu.py" start "/tmp/cpu-$NAME.json"
 
 "$BIN_BENCH" load \
   --run-id "$NAME" \
@@ -54,7 +48,7 @@ print((d.get('final_service_stats') or {}).get('completed', 0))
 ")
 echo
 echo "-- cpu attribution --"
-python3 "$REPO_ROOT/scripts/cpu.py" stop "/tmp/cpu-$NAME.json" "$COMPLETED" \
+python3 "$PROJECT_ROOT/scripts/cpu.py" stop "/tmp/cpu-$NAME.json" "$COMPLETED" \
   | tee "$RESULTS_DIR/$NAME.cpu.json"
 
 # Restate's on-disk footprint after the run: the answer to "does short

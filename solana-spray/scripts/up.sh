@@ -14,5 +14,6 @@ echo
 echo "ingress : http://$INGRESS"
 echo "admin   : http://$ADMIN"
 echo "stats   : http://$STATS/stats"
+echo "state   : $RUN_DIR"
 c "http://$STATS/config"
 echo

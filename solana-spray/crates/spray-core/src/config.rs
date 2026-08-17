@@ -45,6 +45,15 @@ pub struct AppConfig {
     /// Trades nothing (sends are idempotent) for one durable append of latency
     /// on the path that actually matters.
     pub fast_path_first_send: bool,
+    /// Wait for the sink to confirm a transaction's final event before the
+    /// handler returns. Defaults on: with it off, the terminal events of any
+    /// transaction that completed within the sink's linger window are lost when
+    /// the process is killed. Exposed so that failure can be reproduced on
+    /// demand rather than taken on faith.
+    pub durable_settle: bool,
+    /// How long to wait for that confirmation before failing the handler so
+    /// Restate retries it.
+    pub settle_confirm_timeout: Duration,
     /// Use a durable Restate timer for the post-landing commitment wait instead
     /// of an in-process sleep. Costs one journal append plus a partition timer
     /// per transaction; exposed so the cost can be measured rather than argued
@@ -86,7 +95,7 @@ impl AppConfig {
             },
             sink: SinkConfig {
                 kind: sink_kind,
-                path: env_str("SPRAY_SINK_PATH", "/var/spray/events"),
+                path: env_str("SPRAY_SINK_PATH", ".run/service/events"),
                 queue_capacity: env_u64("SPRAY_SINK_QUEUE", 262_144) as usize,
                 batch_size: env_u64("SPRAY_SINK_BATCH", 2_048) as usize,
                 batch_linger_ms: env_u64("SPRAY_SINK_LINGER_MS", 20),
@@ -94,6 +103,11 @@ impl AppConfig {
             },
             emit_all_stages: env_bool("SPRAY_EMIT_ALL_STAGES", true),
             fast_path_first_send: env_bool("SPRAY_FAST_PATH", true),
+            durable_settle: env_bool("SPRAY_DURABLE_SETTLE", true),
+            settle_confirm_timeout: Duration::from_millis(env_u64(
+                "SPRAY_SETTLE_CONFIRM_TIMEOUT_MS",
+                10_000,
+            )),
             durable_commitment_wait: env_bool("SPRAY_DURABLE_COMMITMENT_WAIT", false),
             inactivity_timeout: Duration::from_secs(env_u64("SPRAY_INACTIVITY_TIMEOUT_S", 300)),
             abort_timeout: Duration::from_secs(env_u64("SPRAY_ABORT_TIMEOUT_S", 600)),
@@ -111,12 +125,13 @@ impl AppConfig {
     /// One-line summary recorded in benchmark output.
     pub fn summary(&self) -> String {
         format!(
-            "region={} journal_mode={} sink={:?} slot_ms={} fast_path={} emit_all_stages={} durable_commitment_wait={} journal_retention={}s workers={}",
+            "region={} journal_mode={} sink={:?} slot_ms={} fast_path={} durable_settle={} emit_all_stages={} durable_commitment_wait={} journal_retention={}s workers={}",
             self.region.as_str(),
             self.journal_mode.as_str(),
             self.sink.kind,
             self.cluster.slot_ms,
             self.fast_path_first_send,
+            self.durable_settle,
             self.emit_all_stages,
             self.durable_commitment_wait,
             self.journal_retention.as_secs(),

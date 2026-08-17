@@ -16,6 +16,20 @@
 //! The emit path itself is a non-blocking push into a bounded ring. If the sink
 //! backs up we drop and count, rather than stalling a transaction that has 400
 //! milliseconds to reach a leader.
+//!
+//! ## The tail is the exception, and it is not optional
+//!
+//! Idempotent re-emission covers everything *except the last events of a
+//! transaction*. Replay only re-emits for an invocation that runs again; one
+//! that had already completed never will. So an event still sitting in the
+//! writer's buffer when the process is killed is gone for good — measured, not
+//! theorised: a SIGKILL run lost the terminal events of the ~13 transactions
+//! that had completed within the linger window.
+//!
+//! The fix costs no journal appends. Restate does not consider an invocation
+//! complete until its handler returns, so flushing the sink *before* returning
+//! makes the tail at-least-once: either the flush lands, or the handler never
+//! returned and Restate replays and re-emits. See [`EventSink::emit_durable`].
 
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
@@ -94,6 +108,9 @@ pub struct SinkStats {
     pub written: AtomicU64,
     pub batches: AtomicU64,
     pub write_micros: AtomicU64,
+    /// Durable emits the sink could not confirm. Each one failed its handler so
+    /// Restate would retry; a non-zero value means the sink is the bottleneck.
+    pub unconfirmed: AtomicU64,
 }
 
 impl SinkStats {
@@ -104,6 +121,7 @@ impl SinkStats {
             written: self.written.load(Ordering::Relaxed),
             batches: self.batches.load(Ordering::Relaxed),
             write_micros: self.write_micros.load(Ordering::Relaxed),
+            unconfirmed: self.unconfirmed.load(Ordering::Relaxed),
         }
     }
 }
@@ -115,11 +133,33 @@ pub struct SinkSnapshot {
     pub written: u64,
     pub batches: u64,
     pub write_micros: u64,
+    pub unconfirmed: u64,
 }
+
+/// One queued event, optionally carrying an ack the writer resolves once the
+/// batch containing it has reached the sink.
+struct SinkMsg {
+    ev: LifecycleEvent,
+    ack: Option<tokio::sync::oneshot::Sender<()>>,
+}
+
+/// Raised when a durable emit could not be confirmed in time. Returning this
+/// from a handler is deliberate: Restate retries the invocation, the trail is
+/// re-emitted, and the dedup key keeps it harmless.
+#[derive(Debug)]
+pub struct SinkTimeout;
+
+impl std::fmt::Display for SinkTimeout {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "event sink did not confirm the terminal event in time")
+    }
+}
+
+impl std::error::Error for SinkTimeout {}
 
 /// Handle used from the hot path. Cloning is cheap; emitting never awaits.
 pub struct EventSink {
-    txs: Vec<mpsc::Sender<LifecycleEvent>>,
+    txs: Vec<mpsc::Sender<SinkMsg>>,
     pub stats: Arc<SinkStats>,
     kind: SinkKind,
 }
@@ -133,21 +173,29 @@ impl EventSink {
             // Still go through a channel and a drain task so the benchmark pays
             // the same queueing cost it would with a real producer attached.
             for _ in 0..config.writers.max(1) {
-                let (tx, mut rx) = mpsc::channel::<LifecycleEvent>(config.queue_capacity);
+                let (tx, mut rx) = mpsc::channel::<SinkMsg>(config.queue_capacity);
                 let stats = Arc::clone(&stats);
                 tokio::spawn(async move {
-                    let mut buf = Vec::with_capacity(1024);
+                    let mut buf: Vec<SinkMsg> = Vec::with_capacity(1024);
                     while rx.recv_many(&mut buf, 1024).await > 0 {
                         stats.written.fetch_add(buf.len() as u64, Ordering::Relaxed);
                         stats.batches.fetch_add(1, Ordering::Relaxed);
-                        buf.clear();
+                        // The null sink discards, so there is nothing to make
+                        // durable; acking on receipt is the honest behaviour.
+                        // It follows that the null sink cannot provide the
+                        // crash guarantee — only the file sink can.
+                        for m in buf.drain(..) {
+                            if let Some(ack) = m.ack {
+                                let _ = ack.send(());
+                            }
+                        }
                     }
                 });
                 txs.push(tx);
             }
         } else {
             for shard in 0..config.writers.max(1) {
-                let (tx, rx) = mpsc::channel::<LifecycleEvent>(config.queue_capacity);
+                let (tx, rx) = mpsc::channel::<SinkMsg>(config.queue_capacity);
                 let stats = Arc::clone(&stats);
                 let cfg = config.clone();
                 tokio::spawn(async move {
@@ -174,12 +222,59 @@ impl EventSink {
     #[inline]
     pub fn emit(&self, ev: LifecycleEvent) {
         self.stats.emitted.fetch_add(1, Ordering::Relaxed);
-        // Shard by tx so one transaction's events keep their relative order in
-        // one file, which makes the trail readable by eye as well as by tool.
-        let idx = (fnv(&ev.tx_id) as usize) % self.txs.len();
-        if self.txs[idx].try_send(ev).is_err() {
+        if self.txs[self.shard_of(&ev.tx_id)]
+            .try_send(SinkMsg { ev, ack: None })
+            .is_err()
+        {
             self.stats.dropped.fetch_add(1, Ordering::Relaxed);
         }
+    }
+
+    /// Push an event and wait until it has actually reached the sink.
+    ///
+    /// Call this for the last event of a transaction, before returning from the
+    /// handler. Because a transaction's events are all on one shard, flushing
+    /// that shard flushes the whole trail, so one await at the end covers
+    /// everything the transaction emitted.
+    ///
+    /// This is off the critical path: by the time it runs the transaction has
+    /// already landed or expired, and no leader is waiting on us.
+    pub async fn emit_durable(
+        &self,
+        ev: LifecycleEvent,
+        timeout: Duration,
+    ) -> Result<(), SinkTimeout> {
+        self.stats.emitted.fetch_add(1, Ordering::Relaxed);
+        let (ack_tx, ack_rx) = tokio::sync::oneshot::channel();
+        let idx = self.shard_of(&ev.tx_id);
+        if self.txs[idx]
+            .send(SinkMsg {
+                ev,
+                ack: Some(ack_tx),
+            })
+            .await
+            .is_err()
+        {
+            self.stats.dropped.fetch_add(1, Ordering::Relaxed);
+            return Err(SinkTimeout);
+        }
+        match tokio::time::timeout(timeout, ack_rx).await {
+            Ok(Ok(())) => Ok(()),
+            // Either the deadline passed or the writer died. Both mean we
+            // cannot claim the trail is complete, so say so and let Restate
+            // retry rather than quietly returning a truncated record.
+            _ => {
+                self.stats.unconfirmed.fetch_add(1, Ordering::Relaxed);
+                Err(SinkTimeout)
+            }
+        }
+    }
+
+    /// Shard by tx so one transaction's events keep their relative order in one
+    /// file, which makes the trail readable by eye as well as by tool.
+    #[inline]
+    fn shard_of(&self, tx_id: &str) -> usize {
+        (fnv(tx_id) as usize) % self.txs.len()
     }
 }
 
@@ -194,7 +289,7 @@ fn fnv(s: &str) -> u64 {
 
 async fn file_writer(
     shard: usize,
-    mut rx: mpsc::Receiver<LifecycleEvent>,
+    mut rx: mpsc::Receiver<SinkMsg>,
     cfg: SinkConfig,
     stats: Arc<SinkStats>,
 ) -> anyhow::Result<()> {
@@ -211,27 +306,55 @@ async fn file_writer(
         .await?;
     let mut file = tokio::io::BufWriter::with_capacity(1 << 20, file);
 
-    let mut batch: Vec<LifecycleEvent> = Vec::with_capacity(cfg.batch_size);
+    let mut batch: Vec<SinkMsg> = Vec::with_capacity(cfg.batch_size);
     let linger = Duration::from_millis(cfg.batch_linger_ms);
     let mut scratch = Vec::with_capacity(1 << 20);
 
     loop {
-        let n = tokio::select! {
-            n = rx.recv_many(&mut batch, cfg.batch_size) => n,
-            _ = tokio::time::sleep(linger), if !batch.is_empty() => 0,
-        };
-        if n == 0 && batch.is_empty() {
-            // Channel closed and nothing pending.
-            break;
+        // Block until there is something to write, then spend up to `linger`
+        // gathering more.
+        //
+        // `recv_many` returns as soon as *one* message is available, so waiting
+        // on it alone yields a "batch" of one under light load: the linger has
+        // to be an explicit deadline around the gather, or the setting does
+        // nothing at all.
+        match rx.recv().await {
+            Some(m) => batch.push(m),
+            None => break, // channel closed
+        }
+        let deadline = tokio::time::Instant::now() + linger;
+        while batch.len() < cfg.batch_size {
+            // A pending ack means a handler is blocked on this batch reaching
+            // disk. Stop gathering and write: the linger is a throughput
+            // optimisation and must never hold a caller hostage.
+            if batch.iter().any(|m| m.ack.is_some()) {
+                break;
+            }
+            let remaining = deadline.saturating_duration_since(tokio::time::Instant::now());
+            if remaining.is_zero() {
+                break;
+            }
+            let want = cfg.batch_size - batch.len();
+            tokio::select! {
+                n = rx.recv_many(&mut batch, want) => { if n == 0 { break } }
+                _ = tokio::time::sleep(remaining) => break,
+            }
         }
         let t0 = std::time::Instant::now();
         scratch.clear();
-        for ev in &batch {
-            serde_json::to_writer(&mut scratch, ev)?;
+        for m in &batch {
+            serde_json::to_writer(&mut scratch, &m.ev)?;
             scratch.push(b'\n');
         }
         file.write_all(&scratch).await?;
         file.flush().await?;
+        // Only now is the batch genuinely out of this process's memory, so this
+        // is the earliest point an ack may be released.
+        for m in batch.iter_mut() {
+            if let Some(ack) = m.ack.take() {
+                let _ = ack.send(());
+            }
+        }
         stats
             .write_micros
             .fetch_add(t0.elapsed().as_micros() as u64, Ordering::Relaxed);
@@ -274,5 +397,121 @@ impl EventTrail {
             terminal: stage == Stage::Settled,
             journal_steps,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::types::Region;
+
+    fn ev(tx: &str, stage: Stage) -> LifecycleEvent {
+        EventTrail {
+            tx_id: tx.to_string(),
+            region: Region::Us,
+            invocation_id: "inv".to_string(),
+        }
+        .event(stage, 1, 0, None)
+    }
+
+    /// The guarantee the terminal event depends on: once `emit_durable`
+    /// resolves, everything that transaction emitted is on disk — not merely
+    /// queued. Without this, a SIGKILL right after the handler returns loses
+    /// the tail of a trail that will never be replayed.
+    #[tokio::test]
+    async fn emit_durable_resolves_only_after_the_trail_is_on_disk() {
+        let dir = std::env::temp_dir().join(format!("spray-sink-test-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let prefix = dir.join("events").to_string_lossy().to_string();
+
+        let sink = EventSink::start(SinkConfig {
+            kind: SinkKind::File,
+            path: prefix.clone(),
+            // A linger far longer than the test: if the ack were resolved on
+            // enqueue rather than on flush, the file would still be empty.
+            batch_linger_ms: 60_000,
+            batch_size: 4,
+            writers: 1,
+            queue_capacity: 1024,
+        });
+
+        sink.emit(ev("tx-1", Stage::Accepted));
+        sink.emit(ev("tx-1", Stage::Validated));
+        sink.emit(ev("tx-1", Stage::Spraying));
+        sink.emit_durable(ev("tx-1", Stage::Settled), Duration::from_secs(10))
+            .await
+            .expect("sink should confirm the terminal event");
+
+        let written = std::fs::read_to_string(format!("{prefix}.0.jsonl")).unwrap();
+        let stages: Vec<Stage> = written
+            .lines()
+            .filter(|l| !l.is_empty())
+            .map(|l| serde_json::from_str::<LifecycleEvent>(l).unwrap().stage)
+            .collect();
+        assert_eq!(
+            stages,
+            vec![
+                Stage::Accepted,
+                Stage::Validated,
+                Stage::Spraying,
+                Stage::Settled
+            ],
+            "the whole trail must be durable once the terminal event is confirmed"
+        );
+
+        std::fs::remove_dir_all(&dir).ok();
+    }
+
+    /// The window `emit_durable` exists to close: a plain `emit` leaves the
+    /// event in the writer's buffer, where a SIGKILL destroys it. That is
+    /// harmless for an invocation that will run again — replay re-emits — but
+    /// unrecoverable for one that has already completed, because nothing will
+    /// ever emit those events again.
+    #[tokio::test]
+    async fn plain_emit_leaves_events_in_memory_until_the_batch_flushes() {
+        let dir = std::env::temp_dir().join(format!("spray-window-test-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let prefix = dir.join("events").to_string_lossy().to_string();
+        let path = format!("{prefix}.0.jsonl");
+
+        let sink = EventSink::start(SinkConfig {
+            kind: SinkKind::File,
+            path: prefix.clone(),
+            batch_linger_ms: 60_000,
+            batch_size: 4096,
+            writers: 1,
+            queue_capacity: 1024,
+        });
+
+        sink.emit(ev("tx-2", Stage::Confirmed));
+        sink.emit(ev("tx-2", Stage::Settled));
+        tokio::time::sleep(Duration::from_millis(200)).await;
+
+        let on_disk = std::fs::read_to_string(&path).unwrap_or_default();
+        assert!(
+            on_disk.is_empty(),
+            "events are still buffered, not durable; killing the process here \
+             would lose them: {on_disk:?}"
+        );
+
+        // The same events become durable only once something forces the flush.
+        sink.emit_durable(ev("tx-2", Stage::Accepted), Duration::from_secs(10))
+            .await
+            .unwrap();
+        let on_disk = std::fs::read_to_string(&path).unwrap();
+        assert_eq!(on_disk.lines().count(), 3);
+
+        std::fs::remove_dir_all(&dir).ok();
+    }
+
+    /// Stage-derived sequence numbers are what let the sink deduplicate replays.
+    /// If two emissions of the same stage disagreed, dedup would silently drop
+    /// real information instead of a duplicate.
+    #[test]
+    fn event_keys_are_stable_across_replays() {
+        let a = ev("tx-9", Stage::Confirmed);
+        let b = ev("tx-9", Stage::Confirmed);
+        assert_eq!((a.tx_id, a.seq, a.stage), (b.tx_id, b.seq, b.stage));
+        assert_ne!(ev("tx-9", Stage::Expired).seq, a.seq);
     }
 }
